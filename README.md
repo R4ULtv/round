@@ -2,9 +2,6 @@
 
 Built with modern web technologies, Round aims to provide a fast, clean, and intuitive interface for development teams.
 
-_(Add a compelling screenshot or GIF of the Round interface here)_
-
-
 ## Table of Contents
 
 - [Table of Contents](#table-of-contents)
@@ -16,11 +13,8 @@ _(Add a compelling screenshot or GIF of the Round interface here)_
   - [Configuration](#configuration)
   - [Database Setup](#database-setup)
   - [Running the App](#running-the-app)
-- [Seeding Data](#seeding-data)
-- [Usage](#usage)
 - [Contributing](#contributing)
 - [License](#license)
-
 
 ## Features
 
