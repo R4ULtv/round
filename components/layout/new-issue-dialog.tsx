@@ -29,6 +29,7 @@ import LabelsSelector from "@/components/issues/labels-selector";
 import {
   priorityEnum,
   statusEnum,
+  issue as issueSchema,
   user as userSchema,
   project as projectSchema,
   labels as labelsSchema,
@@ -40,8 +41,8 @@ type PriorityStatus = (typeof priorityEnum.enumValues)[number];
 type Label = (typeof labelsSchema)[number];
 
 type IssueFormValues = {
-  title: string;
-  description: string;
+  title: typeof issueSchema.$inferSelect.title;
+  description: typeof issueSchema.$inferSelect.description;
   status: IssueStatus;
   priority: PriorityStatus;
   assignedUser?: typeof userSchema.$inferSelect;
@@ -67,7 +68,7 @@ export default function NewIssueDialog({
   const defaultValues = useMemo<IssueFormValues>(
     () => ({
       title: "",
-      description: "",
+      description: null,
       status: "backlog",
       priority: "low",
       assignedUser: undefined,
@@ -102,17 +103,10 @@ export default function NewIssueDialog({
   }, [defaultValues]);
 
   const handleSubmit = useCallback(async () => {
-    if (!formValues.title.trim() || !formValues.description.trim()) {
-      toast.error(
-        !formValues.title.trim()
-          ? "Title is required"
-          : "Description is required",
-        {
-          description: !formValues.title.trim()
-            ? "Please enter a title for your issue"
-            : "Please enter a description for your issue",
-        },
-      );
+    if (!formValues.title.trim()) {
+      toast.error("Title is required", {
+        description: "Please enter a title for your issue",
+      });
       return;
     }
 
@@ -204,8 +198,10 @@ export default function NewIssueDialog({
               id="issue-description"
               aria-label="Issue description"
               placeholder="Add description..."
-              value={formValues.description}
-              onChange={(e) => handleInputChange("description", e.target.value)}
+              value={formValues.description || ""}
+              onChange={(e) =>
+                handleInputChange("description", e.target.value || null)
+              }
               className="border-none w-full shadow-none outline-none resize-none px-0 min-h-16 focus-visible:ring-0 break-words whitespace-normal overflow-wrap bg-transparent dark:bg-transparent"
             />
             <div className="w-full flex items-center justify-start gap-1.5 flex-wrap">
@@ -262,11 +258,7 @@ export default function NewIssueDialog({
 
           <Button
             onClick={handleSubmit}
-            disabled={
-              isSubmitting ||
-              !formValues.title.trim() ||
-              !formValues.description.trim()
-            }
+            disabled={isSubmitting || !formValues.title.trim()}
           >
             {isSubmitting ? "Creating..." : "Create Issue"}
           </Button>
