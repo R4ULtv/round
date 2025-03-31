@@ -22,7 +22,12 @@ export default function ThemeSwitch() {
   };
 
   return (
-    <Button size="sm" variant="ghost" onClick={toggleTheme}>
+    <Button
+      size="icon"
+      variant="ghost"
+      className="size-7"
+      onClick={toggleTheme}
+    >
       {theme === "light" ? <MoonIcon /> : <SunIcon />}
     </Button>
   );
