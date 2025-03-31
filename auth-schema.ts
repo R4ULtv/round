@@ -60,7 +60,7 @@ export const verification = pgTable("verification", {
 
 export const project = pgTable("project", {
   id: text("id").primaryKey(),
-  shortName: text("short_name").notNull(),
+  shortName: text("short_name").notNull().unique(),
   icon: text("icon").notNull(),
   name: text("name").notNull(),
   description: text("description"),
