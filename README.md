@@ -1,3 +1,5 @@
+![Round og image](./public/og-image.png)
+
 **Round is a self-hostable, open-source alternative to Linear, designed for efficient issue tracking and project management.**
 
 Built with modern web technologies, Round aims to provide a fast, clean, and intuitive interface for development teams.
