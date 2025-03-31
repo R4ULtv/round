@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -181,6 +182,9 @@ export default function NewIssueDialog({
             <ChevronRightIcon className="size-3.5 text-muted-foreground" /> New
             Issue
           </DialogTitle>
+          <DialogDescription className="sr-only">
+            Create a new issue for the current project
+          </DialogDescription>
         </DialogHeader>
         <div className="px-3">
           <div className="space-y-2">
