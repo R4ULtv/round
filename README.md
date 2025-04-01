@@ -89,17 +89,16 @@ Follow these steps to get a local instance of Round running.
     POSTGRES_URL="your_postgresql_connection_string"
 
     # GitHub OAuth Credentials
-    # Create a GitHub OAuth App: https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app
-    # Set Authorization callback URL to: http://localhost:3000/api/auth/callback/github (or your deployed URL)
+    # Create a GitHub OAuth App
+    # Set Authorization callback URL to
     GITHUB_CLIENT_ID="your_github_client_id"
     GITHUB_CLIENT_SECRET="your_github_client_secret"
 
     # Application URL (used for auth callbacks and client-side redirects)
-    # Use http://localhost:3000 for local development
-    NEXT_PUBLIC_APP_URL="http://localhost:3000"
+    NEXT_PUBLIC_APP_URL="https://your-app-url.com"
 
-    # Optional: Add a secret for session encryption (recommended for production)
-    # BETTER_AUTH_SECRET="generate_a_strong_random_string"
+    # Add a secret for session encryption (required for production)
+    BETTER_AUTH_SECRET="generate_a_strong_random_string"
     ```
 
     - Replace placeholder values with your actual credentials.
