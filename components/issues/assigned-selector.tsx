@@ -50,7 +50,7 @@ export default function AssignedSelector({
             <>
               <Avatar className="size-3.5">
                 <AvatarImage
-                  src={assignedUser.image || ""}
+                  src={assignedUser.image || undefined}
                   alt={assignedUser.name}
                 />
                 <AvatarFallback className="text-xs">
@@ -91,7 +91,10 @@ export default function AssignedSelector({
                 >
                   <div className="flex items-center gap-2">
                     <Avatar className="size-4">
-                      <AvatarImage src={item.image || ""} alt={item.name} />
+                      <AvatarImage
+                        src={item.image || undefined}
+                        alt={item.name}
+                      />
                       <AvatarFallback className="text-xs">
                         {item.name.substring(0, 2)}
                       </AvatarFallback>
