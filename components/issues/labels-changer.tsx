@@ -107,7 +107,7 @@ export default function LabelsChanger({
           </Button>
         </PopoverTrigger>
       ))}
-      <PopoverContent className="border w-full min-w-48 p-0" align="start">
+      <PopoverContent className="border w-full min-w-48 p-0" align="end">
         <Command>
           <CommandInput placeholder="Change labels..." />
           <CommandList>
