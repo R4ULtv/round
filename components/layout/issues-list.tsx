@@ -76,6 +76,7 @@ export default function IssueList({
     <div className="grid" role="list" aria-label="Issues by status">
       {statuses.map((status) => {
         const statusIssues = groupedIssues[status] || [];
+        if (statusIssues.length === 0) return null;
         const config = statusConfigs[status];
         return (
           <div key={status}>
