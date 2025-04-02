@@ -84,7 +84,18 @@ export default function NewIssueDialog({
 
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
-      if (e.key === "c" && !e.metaKey && !e.ctrlKey && !e.altKey && !open) {
+      const isInputActive =
+        document.activeElement instanceof HTMLElement &&
+        (document.activeElement.tagName === "INPUT" ||
+          document.activeElement.tagName === "TEXTAREA");
+      if (
+        e.key === "c" &&
+        !e.metaKey &&
+        !e.ctrlKey &&
+        !e.altKey &&
+        !open &&
+        !isInputActive
+      ) {
         e.preventDefault();
         setOpen(true);
       }
