@@ -70,7 +70,7 @@ export const project = pgTable("project", {
   isPublic: boolean("is_public").notNull().default(false),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
-  expirationDate: timestamp("expiration_date"),
+  targetDate: timestamp("target_date"),
   deletedAt: timestamp("deleted_at"),
 });
 
