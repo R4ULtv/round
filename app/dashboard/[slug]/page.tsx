@@ -59,7 +59,7 @@ export default async function ProjectPage({
       description: projectSchema.description,
       ownerId: projectSchema.ownerId,
       isPublic: projectSchema.isPublic,
-      expirationDate: projectSchema.expirationDate,
+      targetDate: projectSchema.targetDate,
       deletedAt: projectSchema.deletedAt,
     })
     .from(projectMember)
