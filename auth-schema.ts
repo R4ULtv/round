@@ -61,7 +61,7 @@ export const verification = pgTable("verification", {
 export const project = pgTable("project", {
   id: text("id").primaryKey(),
   shortName: text("short_name").notNull().unique(),
-  icon: text("icon").notNull(),
+  icon: text("icon"),
   name: text("name").notNull(),
   description: text("description"),
   ownerId: text("owner_id")
