@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { toast } from "sonner";
-
 import {
   Dialog,
   DialogContent,
@@ -17,7 +16,6 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-
 import {
   ChevronRightIcon,
   FolderPenIcon,
@@ -25,12 +23,16 @@ import {
   PlusIcon,
   UsersRoundIcon,
 } from "lucide-react";
-
 import { project as projectSchema } from "@/auth-schema";
 import { createProject } from "@/server/new-project";
 import { useRouter } from "next/navigation";
 
 type ProjectFormValues = Omit<typeof projectSchema.$inferInsert, "ownerId">;
+
+// Moved validation functions outside component to prevent recreation on each render
+const validateShortName = (value: string) => /^[A-Z]{3}$/.test(value);
+const validateProjectId = (value: string) =>
+  value.length >= 3 && value.length <= 20;
 
 export default function NewProjectDialog() {
   const router = useRouter();
@@ -53,27 +55,16 @@ export default function NewProjectDialog() {
   const [formValues, setFormValues] =
     useState<ProjectFormValues>(defaultValues);
 
-  useEffect(() => {
-    const handleKeyPress = (e: KeyboardEvent) => {
-      const isInputActive =
-        document.activeElement instanceof HTMLElement &&
-        (document.activeElement.tagName === "INPUT" ||
-          document.activeElement.tagName === "TEXTAREA");
-
-      if (
-        e.key === "p" &&
-        (e.metaKey || e.ctrlKey) &&
-        !open &&
-        !isInputActive
-      ) {
-        e.preventDefault();
-        setOpen(true);
-      }
-    };
-
-    document.addEventListener("keydown", handleKeyPress);
-    return () => document.removeEventListener("keydown", handleKeyPress);
-  }, [open]);
+  // Calculate form validity once instead of on every render
+  const isFormValid = useMemo(
+    () =>
+      formValues.name.trim() &&
+      formValues.shortName.trim() &&
+      validateShortName(formValues.shortName) &&
+      formValues.id.trim() &&
+      validateProjectId(formValues.id),
+    [formValues.name, formValues.shortName, formValues.id],
+  );
 
   const resetForm = useCallback(() => {
     setFormValues(defaultValues);
@@ -82,13 +73,12 @@ export default function NewProjectDialog() {
   const handleDialogChange = useCallback(
     (isOpen: boolean) => {
       setOpen(isOpen);
-      if (!isOpen) {
-        resetForm();
-      }
+      if (!isOpen) resetForm();
     },
     [resetForm],
   );
 
+  // Generic field update handler
   const handleInputChange = useCallback(
     (
       field: keyof ProjectFormValues,
@@ -99,19 +89,9 @@ export default function NewProjectDialog() {
     [],
   );
 
-  const validateShortName = useCallback((value: string) => {
-    const regex = /^[A-Z]{3}$/;
-    return regex.test(value);
-  }, []);
-
-  const validateProjectId = useCallback((value: string) => {
-    return value.length >= 3 && value.length <= 20;
-  }, []);
-
   const handleShortNameChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      const value = e.target.value.toUpperCase().slice(0, 3);
-      handleInputChange("shortName", value);
+      handleInputChange("shortName", e.target.value.toUpperCase().slice(0, 3));
     },
     [handleInputChange],
   );
@@ -120,8 +100,8 @@ export default function NewProjectDialog() {
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const value = e.target.value
         .toLowerCase()
-        .replace(/[^a-z\s-]/g, "") // Remove all chars except lowercase letters, spaces, and dashes
-        .replace(/\s+/g, "-") // Replace spaces with dashes
+        .replace(/[^a-z\s-]/g, "")
+        .replace(/\s+/g, "-")
         .slice(0, 20);
       handleInputChange("id", value);
     },
@@ -129,6 +109,7 @@ export default function NewProjectDialog() {
   );
 
   const handleSubmit = useCallback(async () => {
+    // Simplified validation logic using validation functions
     if (!formValues.name.trim()) {
       toast.error("Project name is required", {
         description: "Please enter a name for your project",
@@ -138,7 +119,7 @@ export default function NewProjectDialog() {
 
     if (!formValues.id.trim() || !validateProjectId(formValues.id)) {
       toast.error("Valid project ID is required", {
-        description: "Project ID must be between 5-20 characters",
+        description: "Project ID must be between 3-20 characters",
       });
       return;
     }
@@ -155,7 +136,6 @@ export default function NewProjectDialog() {
 
     try {
       setIsSubmitting(true);
-
       await createProject({
         id: formValues.id,
         name: formValues.name,
@@ -182,14 +162,30 @@ export default function NewProjectDialog() {
     } finally {
       setIsSubmitting(false);
     }
-  }, [formValues, resetForm, validateProjectId, validateShortName, router]);
+  }, [formValues, resetForm, router]);
 
-  const isFormValid =
-    formValues.name.trim() &&
-    formValues.shortName.trim() &&
-    validateShortName(formValues.shortName) &&
-    formValues.id.trim() &&
-    validateProjectId(formValues.id);
+  // Keyboard shortcut handler
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      const isInputActive =
+        document.activeElement instanceof HTMLElement &&
+        (document.activeElement.tagName === "INPUT" ||
+          document.activeElement.tagName === "TEXTAREA");
+
+      if (
+        e.key === "p" &&
+        (e.metaKey || e.ctrlKey) &&
+        !open &&
+        !isInputActive
+      ) {
+        e.preventDefault();
+        setOpen(true);
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyPress);
+    return () => document.removeEventListener("keydown", handleKeyPress);
+  }, [open]);
 
   return (
     <Dialog open={open} onOpenChange={handleDialogChange}>
