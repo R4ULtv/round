@@ -20,10 +20,12 @@ import { project as projectSchema, user as userSchema } from "@/auth-schema";
 export function AppSidebar({
   projects,
   members,
+  currentProject,
   ...props
 }: React.ComponentProps<typeof Sidebar> & {
   projects: (typeof projectSchema.$inferInsert)[];
   members: (typeof userSchema.$inferInsert)[];
+  currentProject: typeof projectSchema.$inferInsert;
 }) {
   return (
     <Sidebar collapsible="offcanvas" {...props}>
@@ -45,7 +47,7 @@ export function AppSidebar({
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMembers members={members} />
+        <NavMembers members={members} currentProject={currentProject} />
         <NavProjects projects={projects} />
       </SidebarContent>
       <SidebarFooter>
