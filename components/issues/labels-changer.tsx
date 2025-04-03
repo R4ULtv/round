@@ -94,7 +94,7 @@ export default function LabelsChanger({
       {selectedLabels.map((item) => (
         <PopoverTrigger asChild key={item.label}>
           <Button
-            className="rounded-full text-xs h-7"
+            className="rounded-full text-xs h-7 text-muted-foreground"
             variant="outline"
             size="sm"
             role="combobox"
@@ -104,9 +104,7 @@ export default function LabelsChanger({
               className="size-2.5 rounded-full"
               style={{ backgroundColor: item.color || "#888888" }}
             />
-            <span className="first-letter:uppercase text-muted-foreground">
-              {item.label}
-            </span>
+            <span className="first-letter:uppercase">{item.label}</span>
           </Button>
         </PopoverTrigger>
       ))}
