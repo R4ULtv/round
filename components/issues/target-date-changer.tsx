@@ -11,6 +11,7 @@ import { CalendarX2Icon } from "lucide-react";
 import { useState } from "react";
 import { updateTargetDate } from "@/server/update-issue";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export default function TargetDateChanger({
   issueId,
@@ -19,6 +20,7 @@ export default function TargetDateChanger({
   issueId: string;
   targetDate: Date | undefined;
 }) {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(targetDate);
 
@@ -32,6 +34,7 @@ export default function TargetDateChanger({
           issueId: issueId,
           targetDate: selectedDate || null,
         });
+        router.refresh();
         toast.success("Target Date Updated", {
           description: "The issue target date has been updated.",
         });

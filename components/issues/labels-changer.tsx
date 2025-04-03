@@ -18,6 +18,7 @@ import { labels as labelsMap, issue as issueSchema } from "@/auth-schema";
 import { useState } from "react";
 import { toast } from "sonner";
 import { updateLabels } from "@/server/update-issue";
+import { useRouter } from "next/navigation";
 
 type Label = (typeof labelsMap)[number];
 
@@ -28,6 +29,7 @@ export default function LabelsChanger({
   issueId: string;
   labels: NonNullable<typeof issueSchema.$inferInsert.labels>;
 }) {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [selectedLabels, setSelectedLabels] = useState<Label[]>(() =>
     labels
@@ -69,6 +71,7 @@ export default function LabelsChanger({
           issueId,
           labels: newLabels,
         });
+        router.refresh();
         toast.success("Labels Updated", {
           description: "The issue labels have been updated.",
         });

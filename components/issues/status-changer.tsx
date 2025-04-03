@@ -17,6 +17,7 @@ import {
 import { StatusIcon } from "@/lib/icons";
 import { updateStatus } from "@/server/update-issue";
 import { CheckIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -29,6 +30,7 @@ export default function StatusChanger({
   issueId: string;
   status: IssueStatus;
 }) {
+  const router = useRouter();
   const allStatus = statusEnum.enumValues;
   const [open, setOpen] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState(status);
@@ -38,6 +40,7 @@ export default function StatusChanger({
     setOpen(false);
     try {
       await updateStatus({ issueId: issueId, status: item });
+      router.refresh();
       toast.success("Status Updated", {
         icon: <StatusIcon status={item} className="size-4" />,
         description: "The issue status has been updated.",

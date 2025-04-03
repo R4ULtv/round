@@ -17,6 +17,7 @@ import {
 import { PriorityIcon } from "@/lib/icons";
 import { updatePriority } from "@/server/update-issue";
 import { CheckIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -29,6 +30,7 @@ export default function PriorityChanger({
   issueId: string;
   priority: IssuePriority;
 }) {
+  const router = useRouter();
   const allPriority = priorityEnum.enumValues;
 
   const [open, setOpen] = useState(false);
@@ -39,6 +41,7 @@ export default function PriorityChanger({
     setOpen(false);
     try {
       await updatePriority({ issueId: issueId, priority: item });
+      router.refresh();
       toast.success("Priority Updated", {
         icon: <PriorityIcon priority={item} className="size-4" />,
         description: "The issue priority has been updated.",

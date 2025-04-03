@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/popover";
 import { updateAssignedUser } from "@/server/update-issue";
 import { CheckIcon, CircleUserRoundIcon, SendIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -29,6 +30,7 @@ export default function AssignedChanger({
   members: (typeof userSchema.$inferSelect)[];
   assignedUser: typeof userSchema.$inferSelect | undefined;
 }) {
+  const router = useRouter();
   const [selectedUser, setSelectedUser] = useState(assignedUser);
   const [open, setOpen] = useState(false);
 
@@ -42,6 +44,7 @@ export default function AssignedChanger({
         issueId: issueId,
         assignedUserId: selectedUser?.id || null,
       });
+      router.refresh();
       toast.success("Assigned User Updated", {
         description: "The issue assigned user has been updated.",
       });
