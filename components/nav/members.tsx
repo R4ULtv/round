@@ -1,7 +1,6 @@
 "use client";
 
-import { SendIcon } from "lucide-react";
-import { user as userSchema } from "@/auth-schema";
+import { user as userSchema, project as projectSchema } from "@/auth-schema";
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -10,11 +9,14 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import InviteDialog from "@/components/layout/invite-dialog";
 
 export function NavMembers({
   members,
+  currentProject,
 }: {
   members: (typeof userSchema.$inferInsert)[];
+  currentProject: typeof projectSchema.$inferInsert;
 }) {
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
@@ -34,10 +36,7 @@ export function NavMembers({
           </SidebarMenuItem>
         ))}
         <SidebarMenuItem>
-          <SidebarMenuButton className="text-sidebar-foreground/70">
-            <SendIcon className="text-sidebar-foreground/70" />
-            <span>Invite to collaborate...</span>
-          </SidebarMenuButton>
+          <InviteDialog projectId={currentProject.id} />
         </SidebarMenuItem>
       </SidebarMenu>
     </SidebarGroup>
