@@ -1,5 +1,3 @@
-"use client";
-
 import { MoreHorizontalIcon } from "lucide-react";
 
 import { project as projectSchema } from "@/auth-schema";
@@ -12,6 +10,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
+import DynamicIcon from "../dynamic-icon";
 
 export function NavProjects({
   projects,
@@ -26,6 +25,11 @@ export function NavProjects({
           <SidebarMenuItem key={item.name}>
             <SidebarMenuButton asChild>
               <Link href={`/dashboard/${item.id}`}>
+                {item.icon && (
+                  <div className="bg-sidebar-accent rounded-sm p-1 border border-border">
+                    <DynamicIcon name={item.icon} className="size-3" />
+                  </div>
+                )}
                 <span>{item.name}</span>
               </Link>
             </SidebarMenuButton>

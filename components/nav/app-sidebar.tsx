@@ -1,5 +1,3 @@
-"use client";
-
 import * as React from "react";
 import { RoundIcon } from "@/lib/icons";
 import Link from "next/link";
