@@ -60,13 +60,13 @@ export const verification = pgTable("verification", {
 
 export const project = pgTable("project", {
   id: text("id").primaryKey(),
-  shortName: text("short_name").notNull().unique(),
-  icon: text("icon"),
   name: text("name").notNull(),
+  shortName: text("short_name").notNull().unique(),
   description: text("description"),
   ownerId: text("owner_id")
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
+  icon: text("icon"),
   isPublic: boolean("is_public").notNull().default(false),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
@@ -130,3 +130,26 @@ export const labels = [
   { label: "security", color: "oklch(70.29% 0.1267 158.89)" },
   { label: "performance", color: "oklch(82.41% 0.1794 91.33)" },
 ];
+
+export const invitationStatusEnum = pgEnum("invitation_status", [
+  "pending",
+  "accepted",
+  "rejected",
+  "expired",
+]);
+
+export const projectInvitation = pgTable("project_invitation", {
+  id: text("id").primaryKey(),
+  email: text("email").notNull(),
+  token: text("token").notNull().unique(),
+  projectId: text("project_id")
+    .notNull()
+    .references(() => project.id, { onDelete: "cascade" }),
+  invitedById: text("invited_by_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  status: invitationStatusEnum("status").notNull().default("pending"),
+  expiresAt: timestamp("expires_at").notNull(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
