@@ -25,6 +25,7 @@ export default async function ProjectPage({
 }: {
   params: Promise<{ slug: string }>;
 }) {
+  const time = performance.now();
   const cookieStore = await cookies();
   const { slug } = await params;
 
@@ -50,12 +51,13 @@ export default async function ProjectPage({
     .from(issue)
     .where(eq(issue.projectId, slug))
     .leftJoin(userSchema, eq(issue.assignedUserId, userSchema.id))
-    .orderBy(desc(issue.priority));
+    .orderBy(desc(issue.priority), desc(issue.updatedAt));
 
   const issues = results.map((result) => ({
     ...result.issue,
     assignedUser: result.assignedUser || null,
   }));
+  console.log("load time: ", (performance.now() - time).toFixed(2), "ms");
 
   return (
     <SidebarProvider
@@ -67,6 +69,7 @@ export default async function ProjectPage({
         variant="inset"
         projects={projectsWhereUserIsMember}
         members={membersOfCurrentProject}
+        currentProject={currentProject}
       />
       <SidebarInset>
         <SiteHeader project={currentProject} />
