@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useMemo } from "react";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 import {
@@ -61,6 +62,7 @@ export default function NewIssueDialog({
   members: (typeof userSchema.$inferSelect)[];
   projects: (typeof projectSchema.$inferSelect)[];
 }) {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [createMore, setCreateMore] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -140,6 +142,8 @@ export default function NewIssueDialog({
         description: "Your issue has been successfully created",
       });
 
+      router.refresh();
+
       if (!createMore) {
         setOpen(false);
       }
@@ -154,7 +158,7 @@ export default function NewIssueDialog({
     } finally {
       setIsSubmitting(false);
     }
-  }, [formValues, selectedLabels, createMore, resetForm]);
+  }, [formValues, selectedLabels, createMore, resetForm, router]);
 
   const handleDialogChange = useCallback(
     (isOpen: boolean) => {
