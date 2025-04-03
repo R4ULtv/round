@@ -17,7 +17,7 @@ import { db } from "@/lib/db";
 import { desc, eq } from "drizzle-orm";
 
 import { ListFilterIcon, Settings2Icon } from "lucide-react";
-import { headers } from "next/headers";
+import { headers, cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 export default async function ProjectPage({
@@ -25,19 +25,13 @@ export default async function ProjectPage({
 }: {
   params: Promise<{ slug: string }>;
 }) {
-  const sessionTime = performance.now();
+  const cookieStore = await cookies();
   const { slug } = await params;
 
   const session = await auth.api.getSession({
     headers: await headers(),
   });
   if (!session) redirect("/login");
-
-  console.log(
-    `session load time: ${(performance.now() - sessionTime).toFixed(2)}ms`,
-  );
-
-  const userTime = performance.now();
 
   const currentProject = await db
     .select()
@@ -96,10 +90,12 @@ export default async function ProjectPage({
     assignedUser: result.assignedUser || null,
   }));
 
-  console.log(`data load time: ${(performance.now() - userTime).toFixed(2)}ms`);
-
   return (
-    <SidebarProvider>
+    <SidebarProvider
+      defaultOpen={
+        cookieStore.get("sidebar_state")?.value === "false" ? false : true
+      }
+    >
       <AppSidebar
         variant="inset"
         projects={projectsWhereUserIsMember}
