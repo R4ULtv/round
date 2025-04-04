@@ -32,23 +32,38 @@ export const PriorityIcon = ({ priority, ...props }: PriorityIconProps) => (
     aria-label={priority}
     {...props}
   >
-    <rect
-      x="11.5"
-      y="2"
-      width="3"
-      height="12"
-      rx="1.5"
-      fillOpacity={priority === "high" ? 1 : 0.5}
-    />
-    <rect
-      x="6.5"
-      y="5"
-      width="3"
-      height="9"
-      rx="1.5"
-      fillOpacity={priority === "medium" || priority === "high" ? 1 : 0.5}
-    />
-    <rect x="1.5" y="8" width="3" height="6" rx="1.5" />
+    {priority === "no_priority" ? (
+      <>
+        <rect x="1.5" y="7.25" width="3" height="1.5" rx="0.5" opacity="0.9" />
+        <rect x="6.5" y="7.25" width="3" height="1.5" rx="0.5" opacity="0.9" />
+        <rect x="11.5" y="7.25" width="3" height="1.5" rx="0.5" opacity="0.9" />
+      </>
+    ) : priority === "urgent" ? (
+      <path
+        fill="lch(66% 80 48)"
+        d="M3 1C1.91067 1 1 1.91067 1 3V13C1 14.0893 1.91067 15 3 15H13C14.0893 15 15 14.0893 15 13V3C15 1.91067 14.0893 1 13 1H3ZM7 4L9 4L8.75391 8.99836H7.25L7 4ZM9 11C9 11.5523 8.55228 12 8 12C7.44772 12 7 11.5523 7 11C7 10.4477 7.44772 10 8 10C8.55228 10 9 10.4477 9 11Z"
+      ></path>
+    ) : (
+      <>
+        <rect
+          x="11.5"
+          y="2"
+          width="3"
+          height="12"
+          rx="1.5"
+          fillOpacity={priority === "high" ? 1 : 0.5}
+        />
+        <rect
+          x="6.5"
+          y="5"
+          width="3"
+          height="9"
+          rx="1.5"
+          fillOpacity={priority === "medium" || priority === "high" ? 1 : 0.5}
+        />
+        <rect x="1.5" y="8" width="3" height="6" rx="1.5" />
+      </>
+    )}
   </svg>
 );
 export const StatusIcon = ({ status, ...props }: StatusIconProps) => (
@@ -131,7 +146,7 @@ export const StatusIcon = ({ status, ...props }: StatusIconProps) => (
         d="M7 0C3.13401 0 0 3.13401 0 7C0 10.866 3.13401 14 7 14C10.866 14 14 10.866 14 7C14 3.13401 10.866 0 7 0ZM11.101 5.10104C11.433 4.76909 11.433 4.23091 11.101 3.89896C10.7691 3.56701 10.2309 3.56701 9.89896 3.89896L5.5 8.29792L4.10104 6.89896C3.7691 6.56701 3.2309 6.56701 2.89896 6.89896C2.56701 7.2309 2.56701 7.7691 2.89896 8.10104L4.89896 10.101C5.2309 10.433 5.7691 10.433 6.10104 10.101L11.101 5.10104Z"
       />
     )}
-    {status === "canceled" && (
+    {(status === "canceled" || status === "duplicate") && (
       <path
         fillRule="evenodd"
         clipRule="evenodd"

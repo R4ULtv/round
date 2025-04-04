@@ -83,7 +83,14 @@ export const statusEnum = pgEnum("status_type", [
   "canceled",
   "duplicate",
 ]);
-export const priorityEnum = pgEnum("priority_type", ["low", "medium", "high"]);
+
+export const priorityEnum = pgEnum("priority_type", [
+  "no_priority",
+  "low",
+  "medium",
+  "high",
+  "urgent",
+]);
 
 export const issue = pgTable("issue", {
   id: text("id").primaryKey(),
@@ -95,7 +102,7 @@ export const issue = pgTable("issue", {
     .notNull()
     .default(sql`ARRAY[]::text[]`),
   status: statusEnum("status").notNull().default("backlog"),
-  priority: priorityEnum("priority").notNull().default("medium"),
+  priority: priorityEnum("priority").notNull().default("no_priority"),
   projectId: text("project_id")
     .notNull()
     .references(() => project.id, { onDelete: "cascade" }),
