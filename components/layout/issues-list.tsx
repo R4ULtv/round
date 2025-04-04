@@ -61,6 +61,10 @@ export default function IssueList({
       label: "Canceled",
       gradient: "from-muted/50",
     },
+    duplicate: {
+      label: "Duplicate",
+      gradient: "from-muted/50",
+    },
   };
 
   const statuses: IssueStatus[] = [
@@ -70,6 +74,7 @@ export default function IssueList({
     "review",
     "done",
     "canceled",
+    "duplicate",
   ];
 
   return (

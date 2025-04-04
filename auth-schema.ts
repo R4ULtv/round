@@ -81,6 +81,7 @@ export const statusEnum = pgEnum("status_type", [
   "review",
   "done",
   "canceled",
+  "duplicate",
 ]);
 export const priorityEnum = pgEnum("priority_type", ["low", "medium", "high"]);
 
