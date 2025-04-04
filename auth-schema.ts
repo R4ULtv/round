@@ -86,10 +86,10 @@ export const statusEnum = pgEnum("status_type", [
 
 export const priorityEnum = pgEnum("priority_type", [
   "no_priority",
-  "low",
-  "medium",
-  "high",
   "urgent",
+  "high",
+  "medium",
+  "low",
 ]);
 
 export const issue = pgTable("issue", {
@@ -137,6 +137,7 @@ export const labels = [
   { label: "documentation", color: "oklch(56.81% 0.1585 275.24)" },
   { label: "security", color: "oklch(70.29% 0.1267 158.89)" },
   { label: "performance", color: "oklch(82.41% 0.1794 91.33)" },
+  { label: "dependencies", color: "oklch(64.21% 0.1923 45.67)" },
 ];
 
 export const invitationStatusEnum = pgEnum("invitation_status", [
