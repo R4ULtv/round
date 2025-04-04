@@ -73,7 +73,7 @@ export default function NewIssueDialog({
       title: "",
       description: null,
       status: "backlog",
-      priority: "low",
+      priority: "no_priority",
       assignedUser: undefined,
       targetDate: undefined,
       project: defaultProject,

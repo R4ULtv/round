@@ -44,7 +44,9 @@ export default function PrioritySelector({
           role="combobox"
         >
           <PriorityIcon priority={priority} className="size-3.5" />
-          <span className="first-letter:uppercase text-xs">{priority}</span>
+          <span className="first-letter:uppercase text-xs">
+            {priority.replace("_", " ")}
+          </span>
         </Button>
       </PopoverTrigger>
       <PopoverContent className="border w-full min-w-48 p-0" align="start">
