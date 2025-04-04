@@ -14,11 +14,32 @@ import { desc, eq } from "drizzle-orm";
 import { ListFilterIcon, Settings2Icon } from "lucide-react";
 import { headers, cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { Metadata } from "next";
 import {
   getCurrentProject,
   getProjectMembers,
   getUserProjects,
 } from "@/lib/data-cache";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const currentProject = await getCurrentProject(slug);
+
+  if (!currentProject) {
+    return {
+      title: "Project not found",
+    };
+  }
+
+  return {
+    title: `${currentProject.name} - Issues`,
+    description: `Manage issues for ${currentProject.name} project`,
+  };
+}
 
 export default async function ProjectPage({
   params,
