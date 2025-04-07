@@ -29,7 +29,6 @@ import { useRouter } from "next/navigation";
 
 type ProjectFormValues = Omit<typeof projectSchema.$inferInsert, "ownerId">;
 
-// Moved validation functions outside component to prevent recreation on each render
 const validateShortName = (value: string) => /^[A-Z]{3}$/.test(value);
 const validateProjectId = (value: string) =>
   value.length >= 3 && value.length <= 20;
@@ -55,7 +54,6 @@ export default function NewProjectDialog() {
   const [formValues, setFormValues] =
     useState<ProjectFormValues>(defaultValues);
 
-  // Calculate form validity once instead of on every render
   const isFormValid = useMemo(
     () =>
       formValues.name.trim() &&
@@ -78,7 +76,6 @@ export default function NewProjectDialog() {
     [resetForm],
   );
 
-  // Generic field update handler
   const handleInputChange = useCallback(
     (
       field: keyof ProjectFormValues,
@@ -163,7 +160,6 @@ export default function NewProjectDialog() {
     }
   }, [formValues, resetForm, router]);
 
-  // Keyboard shortcut handler
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
       const isInputActive =
