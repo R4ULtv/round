@@ -3,6 +3,8 @@
 import { project as projectSchema, projectMember } from "@/auth-schema";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { revalidateTag } from "next/cache";
+import { CACHE_TAGS } from "@/lib/data-cache";
 import { headers } from "next/headers";
 
 type ProjectInput = Omit<typeof projectSchema.$inferInsert, "ownerId">;
@@ -22,9 +24,12 @@ export async function createProject(project: ProjectInput) {
     .values({ ...project, ownerId });
   if (!newProject) throw new Error("Project creation failed");
 
-  return await db.insert(projectMember).values({
+  await db.insert(projectMember).values({
     id: crypto.randomUUID(),
     projectId: project.id,
     userId: ownerId,
   });
+
+  revalidateTag(CACHE_TAGS.USER_PROJECTS);
+  return newProject;
 }

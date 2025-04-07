@@ -109,7 +109,6 @@ export default function NewProjectDialog() {
   );
 
   const handleSubmit = useCallback(async () => {
-    // Simplified validation logic using validation functions
     if (!formValues.name.trim()) {
       toast.error("Project name is required", {
         description: "Please enter a name for your project",
