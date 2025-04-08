@@ -23,6 +23,11 @@ import {
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
+export const metadata = {
+  title: "Projects - Dashboard",
+  description: "Create, manage, and view your projects.",
+};
+
 export default async function DashboardPage() {
   const session = await auth.api.getSession({
     headers: await headers(),
