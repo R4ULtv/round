@@ -115,7 +115,7 @@ export default async function DashboardPage() {
                 {project.targetDate ? (
                   <span className="flex items-center gap-1 text-sm text-muted-foreground">
                     <CalendarX2Icon className="size-4" />
-                    {new Date(project.targetDate).toLocaleDateString("en-US", {
+                    {project.targetDate.toLocaleDateString("en-US", {
                       month: "short",
                       day: "numeric",
                     })}
