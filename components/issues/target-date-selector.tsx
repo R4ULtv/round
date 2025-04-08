@@ -5,7 +5,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { CalendarX2Icon } from "lucide-react";
+import { CalendarPlusIcon, CalendarX2Icon } from "lucide-react";
 
 export default function TargetDateSelector({
   targetDate,
@@ -27,7 +27,11 @@ export default function TargetDateSelector({
           size="sm"
           role="combobox"
         >
-          <CalendarX2Icon className="size-3.5" />
+          {targetDate ? (
+            <CalendarX2Icon className="size-3.5" />
+          ) : (
+            <CalendarPlusIcon className="size-3.5" />
+          )}
 
           {targetDate && (
             <span className="text-xs">
