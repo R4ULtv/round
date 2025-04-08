@@ -4,13 +4,16 @@ import {
   projectMember,
   project as projectSchema,
   user as userSchema,
+  issue as issueSchema,
 } from "@/auth-schema";
-import { eq } from "drizzle-orm";
+import { eq, and, isNull, count, ne } from "drizzle-orm";
 
 const CACHE_TAGS = {
   PROJECT_MEMBERS: "project-members",
   USER_PROJECTS: "user-projects",
   CURRENT_PROJECT: "current-project",
+  PROJECT_MEMBERS_COUNT: "project-members-count",
+  PROJECT_ISSUES_COUNT: "project-issues-count",
 };
 
 export const getProjectMembers = unstable_cache(
@@ -87,5 +90,77 @@ export const getCurrentProject = unstable_cache(
   },
 );
 
-// Export cache tags for revalidation
+/**
+ * Get user projects with owner information
+ */
+export const getUserProjectsWithOwner = unstable_cache(
+  async (userId: string) => {
+    const projects = await db
+      .select()
+      .from(projectMember)
+      .innerJoin(projectSchema, eq(projectMember.projectId, projectSchema.id))
+      .innerJoin(userSchema, eq(projectSchema.ownerId, userSchema.id))
+      .where(eq(projectMember.userId, userId));
+
+    return projects;
+  },
+  [`${CACHE_TAGS.USER_PROJECTS}-with-owner`],
+  {
+    tags: [`${CACHE_TAGS.USER_PROJECTS}-with-owner`],
+    revalidate: 3600, // Cache for 1 hour
+  },
+);
+
+/**
+ * Get the count of members for a specific project
+ */
+export const getProjectMembersCount = unstable_cache(
+  async (projectId: string) => {
+    const result = await db
+      .select({ count: count() })
+      .from(projectMember)
+      .where(eq(projectMember.projectId, projectId));
+
+    return result[0]?.count ?? 0;
+  },
+  [`${CACHE_TAGS.PROJECT_MEMBERS_COUNT}`],
+  {
+    tags: [CACHE_TAGS.PROJECT_MEMBERS_COUNT],
+    revalidate: 3600, // Cache for 1 hour
+  },
+);
+
+/**
+ * Get issue counts for a project, including total and open issues
+ */
+export const getProjectIssuesCount = unstable_cache(
+  async (projectId: string) => {
+    // Get total issues count
+    const totalResult = await db
+      .select({ count: count() })
+      .from(issueSchema)
+      .where(eq(issueSchema.projectId, projectId));
+
+    const openResult = await db
+      .select({ count: count() })
+      .from(issueSchema)
+      .where(
+        and(
+          eq(issueSchema.projectId, projectId),
+          and(isNull(issueSchema.deletedAt), ne(issueSchema.status, "done")),
+        ),
+      );
+
+    return {
+      total: totalResult[0]?.count ?? 0,
+      open: openResult[0]?.count ?? 0,
+    };
+  },
+  [`${CACHE_TAGS.PROJECT_ISSUES_COUNT}`],
+  {
+    tags: [CACHE_TAGS.PROJECT_ISSUES_COUNT],
+    revalidate: 3600, // Cache for 1 hour
+  },
+);
+
 export { CACHE_TAGS };
