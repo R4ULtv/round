@@ -186,7 +186,7 @@ export default function NewProjectDialog() {
     <Dialog open={open} onOpenChange={handleDialogChange}>
       <DialogTrigger asChild>
         <Button variant="outline" size="sm" aria-label="Create new project">
-          <PlusIcon className="size-3.5" />
+          <PlusIcon /> New Project
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-2xl p-0">
